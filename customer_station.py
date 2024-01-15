@@ -79,13 +79,17 @@ class StationChooser:
         elif customer.vehicle_type == 'bike':
             print("Location not provided. Cannot calculate distances.")
         elif customer.vehicle_type == 'cargo' and customer.has_batteries:
-            self.monitor_demand()
+            # Calculate demand for each station
+            demands = [(station.name, self.demand(station)[1]) for station in self.stations]
+            print("Demands for Stations:")
+            for station_name, demand_value in demands:
+                print(f"{station_name}: {demand_value} swaps/hour")
 
-            # Find the station with the maximum number of swaps in the last hour
-            max_demand_station = max(self.stations, key=lambda station: self.demand(station)[1])
+            # Find the station with the maximum demand
+            max_demand_station = max(demands, key=lambda x: x[1])
             time.sleep(2)
-            print(f"The user should go to {max_demand_station.name} (Demand: {self.demand(max_demand_station)[1]} swaps/hour)")
-            return max_demand_station.name
+            print(f"The user should go to {max_demand_station[0]} (Demand: {max_demand_station[1]} swaps/hour)")
+            return max_demand_station[0]
         elif customer.vehicle_type == 'cargo' and not customer.has_batteries:
             return "solar farm"
 
@@ -135,9 +139,9 @@ def main():
         time.sleep(2)
         print(f"......Cargo owner is going to {destination}")
         time.sleep(2)
-        print("cargo has reached to the destination")
+        print("cargo has reached the destination")
 
         # Check if the user has batteries
-        
+
 if __name__ == "__main__":
     main()
