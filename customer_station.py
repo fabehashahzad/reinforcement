@@ -52,11 +52,11 @@ def append_to_csv(file_name, data):
 class StationChooser:
     def __init__(self):
         self.stations = [
-            Station("Station A", (41.8781, -87.6298)),
-            Station("Station B", (37.7749, -122.4194)),
-            Station("Station C", (34.0522, -118.2437)),
-            Station("Station D", (40.7128, -74.0060)),
-            Station("Station E", (51.5074, -0.1278))
+            Station("Station A", (random.uniform(30, 40), random.uniform(-90, -80))),
+            Station("Station B", (random.uniform(35, 45), random.uniform(110, 100))),
+            Station("Station C", (random.uniform(32, 42), random.uniform(-105, -95))),
+            Station("Station D", (random.uniform(38, 48), random.uniform(-70, -100))),
+            Station("Station E", (random.uniform(28, 38), random.uniform(65, 90)))
         ]
 
     def demand(self, station):
@@ -163,11 +163,12 @@ def main():
     time.sleep(1)  # Delay for 1 second
     if customer.vehicle_type == 'bike':
         nearest_station = min(station_chooser.stations, key=lambda station: haversine(customer.location[0], customer.location[1], station.location[0], station.location[1]))
-        print(f"The user should go to {destination} (Distance: {haversine(customer.location[0], customer.location[1], nearest_station.location[0], nearest_station.location[1]):.2f} kilometers)")
+        print(f"The user should go to {nearest_station.name} (Distance: {haversine(customer.location[0], customer.location[1], nearest_station.location[0], nearest_station.location[1]):.2f} kilometers)")
+
         time.sleep(1.5)
         print(f"......Bike owner from location {customer.location} is going to {destination}")
     elif customer.vehicle_type == 'cargo':
-        time.sleep(2)
+        time.sleep(1.8)
         print(f"......Cargo owner is going to {destination}")
         time.sleep(2)
         print("cargo has reached the destination")
