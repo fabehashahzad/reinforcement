@@ -44,11 +44,6 @@ class Customer:
             self.has_batteries = batteries_info == 'yes'
 
 
-def append_to_csv(file_name, data):
-    with open(file_name, 'a', newline='') as csvfile:
-        writer = csv.writer(csvfile)
-        writer.writerow(data)
-
 class StationChooser:
     def __init__(self):
         self.stations = [
@@ -94,17 +89,17 @@ class StationChooser:
         elif customer.vehicle_type == 'bike':
             print("Location not provided. Cannot calculate distances.")
         elif customer.vehicle_type == 'cargo' and customer.has_batteries:
-        # Calculate demand for each station
+            # Calculate demand for each station
             demands = [(station, self.demand(station)[1]) for station in self.stations]
             print("Demands for Stations:")
             for station, demand_value in demands:
                 print(f"{station.name}: {demand_value} swaps/hour")
 
-        # Find stations with the maximum demand
+            # Find stations with the maximum demand
             max_demand_value = max(demands, key=lambda x: x[1])[1]
             max_demand_stations = [station for station, demand_value in demands if demand_value == max_demand_value]
 
-        # If there are multiple stations with the same demand, choose the nearest one
+            # If there are multiple stations with the same demand, choose the nearest one
             if len(max_demand_stations) > 1 and customer.location:
                 distances_to_max_demand_stations = [(station, haversine(customer.location[0], customer.location[1], station.location[0], station.location[1])) for station in max_demand_stations]
                 nearest_station = min(distances_to_max_demand_stations, key=lambda x: x[1])
@@ -118,7 +113,8 @@ class StationChooser:
             else:
                 print("No stations available.")
         elif customer.vehicle_type == 'cargo' and not customer.has_batteries:
-            append_to_csv("cargo_user.csv", ["solar farm", time.strftime("%Y-%m-%d %H:%M:%S")])
+            # Commented out the CSV append statement
+            # append_to_csv("cargo_user.csv", ["solar farm", time.strftime("%Y-%m-%d %H:%M:%S")])
             print("User should go to solar farm.")
             return "solar farm"
 
@@ -152,11 +148,11 @@ def main():
 
     if customer.vehicle_type == 'bike':
         customer.get_location()
-        append_to_csv("bike_user.csv", [customer.location[0], customer.location[1], time.strftime("%Y-%m-%d %H:%M:%S")])
+        # Commented out the CSV append statement
+        # append_to_csv("bike_user.csv", [customer.location[0], customer.location[1], time.strftime("%Y-%m-%d %H:%M:%S")])
     elif customer.vehicle_type == 'cargo':
         customer.get_batteries_info()
-        append_to_csv("cargo_user.csv", [customer.location[0], customer.location[1], time.strftime("%Y-%m-%d %H:%M:%S")])
-
+        
     destination = station_chooser.predict_destination(customer)
 
     print("After considering the input,")
@@ -174,4 +170,4 @@ def main():
         print("cargo has reached the destination")
 
 if __name__ == "__main__":
-    main()
+  main()
