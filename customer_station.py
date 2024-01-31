@@ -1,3 +1,4 @@
+
 import time
 from math import radians, sin, cos, sqrt, atan2
 from concurrent.futures import ThreadPoolExecutor
@@ -17,7 +18,11 @@ class Customer:
 
     def get_vehicle_type(self):
         while True:
-            vehicle_type = input("Are you a bike owner or cargo owner? Enter 'bike' or 'cargo': ").lower()
+            vehicle_type = input("Are you a bike owner or cargo owner? Enter 'bike' or 'cargo' (or 'exit' to quit): ").lower()
+            
+            if vehicle_type == 'exit':
+                break
+
             if vehicle_type in ['bike', 'cargo']:
                 self.vehicle_type = vehicle_type
                 break
@@ -138,36 +143,38 @@ def haversine(lat1, lon1, lat2, lon2):
     return distance
 
 def main():
-    station_chooser = StationChooser()
-    station_chooser.suggest_destinations()
+    while True:
+        station_chooser = StationChooser()
+        station_chooser.suggest_destinations()
 
-    time.sleep(2)  # Delay for 2 seconds
+        time.sleep(2)  # Delay for 2 seconds
 
-    customer = Customer()
-    customer.get_vehicle_type()
+        customer = Customer()
+        customer.get_vehicle_type()
 
-    if customer.vehicle_type == 'bike':
-        customer.get_location()
-        # Commented out the CSV append statement
-        # append_to_csv("bike_user.csv", [customer.location[0], customer.location[1], time.strftime("%Y-%m-%d %H:%M:%S")])
-    elif customer.vehicle_type == 'cargo':
-        customer.get_batteries_info()
-        
-    destination = station_chooser.predict_destination(customer)
+        if customer.vehicle_type == 'bike':
+            customer.get_location()
+            # Commented out the CSV append statement
+            # append_to_csv("bike_user.csv", [customer.location[0], customer.location[1], time.strftime("%Y-%m-%d
 
-    print("After considering the input,")
-    time.sleep(1)  # Delay for 1 second
-    if customer.vehicle_type == 'bike':
-        nearest_station = min(station_chooser.stations, key=lambda station: haversine(customer.location[0], customer.location[1], station.location[0], station.location[1]))
-        print(f"The user should go to {nearest_station.name} (Distance: {haversine(customer.location[0], customer.location[1], nearest_station.location[0], nearest_station.location[1]):.2f} kilometers)")
+        elif customer.vehicle_type == 'cargo':
+            customer.get_batteries_info()
 
-        time.sleep(1.5)
-        print(f"......Bike owner from location {customer.location} is going to {destination}")
-    elif customer.vehicle_type == 'cargo':
-        time.sleep(1.8)
-        print(f"......Cargo owner is going to {destination}")
-        time.sleep(2)
-        print("cargo has reached the destination")
+        destination = station_chooser.predict_destination(customer)
+
+        print("After considering the input,")
+        time.sleep(1)  # Delay for 1 second
+        if customer.vehicle_type == 'bike':
+            nearest_station = min(station_chooser.stations, key=lambda station: haversine(customer.location[0], customer.location[1], station.location[0], station.location[1]))
+            print(f"The user should go to {nearest_station.name} (Distance: {haversine(customer.location[0], customer.location[1], nearest_station.location[0], nearest_station.location[1]):.2f} kilometers)")
+
+            time.sleep(1.5)
+            print(f"......Bike owner from location {customer.location} is going to {destination}")
+        elif customer.vehicle_type == 'cargo':
+            time.sleep(1.8)
+            print(f"......Cargo owner is going to {destination}")
+            time.sleep(2)
+            print("cargo has reached the destination")
 
 if __name__ == "__main__":
-  main()
+    main()
