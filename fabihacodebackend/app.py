@@ -3,8 +3,10 @@ import time
 from math import radians, sin, cos, sqrt, atan2
 from concurrent.futures import ThreadPoolExecutor
 import random
+from flask_cors import CORS  
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes
 
 class Station:
     def __init__(self, name, location):
