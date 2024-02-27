@@ -17,7 +17,7 @@ stations = {
     'Bahria Town': {'latitude': 25.001277, 'longitude': 67.316021},
     'Defense Housing Authority': {'latitude': 24.820710, 'longitude': 67.071325},
     'Korangi': {'latitude': 24.838487, 'longitude': 67.141990},
-    'Tariq Road': {'latitude': 24.900976, 'longitude': 67.164841},
+    'Tariq Road': {'latitude': 24.900976, 'longitude': 67.164841}
 }
 
 @app.route('/suggest-location', methods=['POST'])
